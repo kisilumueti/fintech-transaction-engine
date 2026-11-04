@@ -1,0 +1,3 @@
+package main
+import("log/slog";"net/http";"os";"time";"github.com/kisilumueti/fintech-transaction-engine/internal/httpapi")
+func main(){logger:=slog.New(slog.NewJSONHandler(os.Stdout,&slog.HandlerOptions{Level:slog.LevelInfo,AddSource:true}));addr:=os.Getenv("HTTP_ADDR");if addr==""{addr=":8080"};server:=&http.Server{Addr:addr,Handler:httpapi.NewRouter(logger),ReadHeaderTimeout:5*time.Second,ReadTimeout:15*time.Second,WriteTimeout:30*time.Second,IdleTimeout:60*time.Second};logger.Info("starting fintech API","address",addr);if err:=server.ListenAndServe();err!=nil&&err!=http.ErrServerClosed{logger.Error("server failed","error",err);os.Exit(1)}}
